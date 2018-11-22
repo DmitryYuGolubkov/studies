@@ -1,10 +1,12 @@
 // implementation of lock-free stack for platforms with lock-free std::shared_ptr, where 
 // std::atomic_is_lock_free(&some_shared_ptr) == true
+#include <atomic>
+#include <memory>
 
 template<typename T>
 class lock_free_stack
 {
-privte:
+private:
   struct node
   {
     std::shared_ptr<T> data;
@@ -21,7 +23,7 @@ public:
   {
     std::shared_ptr<node> const new_node = std::make_shared<node>( data );
     new_node->next = head.load();  // if std::shared_ptr is atomic, it might have load()
-    while( !std::atomic_vompare_exchange_weak(&head, &new_node->next, new_node);
+    while( !std::atomic_compare_exchange_weak(&head, &new_node->next, new_node) );
   }
   
   std::shared_ptr<T> pop()
