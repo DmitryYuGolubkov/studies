@@ -1,10 +1,11 @@
-// implementation of lock-free stack for platforms with lock-free std::shared_ptr, where 
+// Example 7.9 from "C++ concurrency in action" by Anthony Williams (2012)
+// Implementation of lock-free stack for platforms with lock-free std::shared_ptr, where 
 // std::atomic_is_lock_free(&some_shared_ptr) == true
 #include <atomic>
 #include <memory>
 
 template<typename T>
-class lock_free_stack
+class lock_free_stack_v0
 {
 private:
   struct node
